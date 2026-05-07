@@ -20,6 +20,7 @@
     <modules>
         <module>cache-experiment-h2</module>
         <module>cache-experiment-mysql</module>
+        <module>batch-write-experiment</module>
     </modules>
 
     <properties>

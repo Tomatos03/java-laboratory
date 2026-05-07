@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: batch-write-experiment
+  datasource:
+    url: jdbc:mysql://localhost:3306/batch_test?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  sql:
+    init:
+      mode: never
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.tomatos.lab.batch: debug
+
+
+
+
