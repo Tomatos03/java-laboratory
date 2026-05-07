@@ -2,6 +2,7 @@ package com.tomatos.lab.cache.h2.controller.cache;
 
 import com.tomatos.lab.cache.h2.entity.User;
 import com.tomatos.lab.cache.h2.service.cache.UserCacheService;
+import com.tomatos.lab.common.timing.annotation.TimingTrack;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -29,12 +30,11 @@ public class CacheController {
      * 场景1：单表查询 - 先查缓存
      */
     @GetMapping("/users/{id}")
+    @TimingTrack
     public User getUser(@PathVariable Long id) {
         boolean hitCache = redisTemplate.hasKey(USER_KEY_PREFIX + id);
-        long start = System.nanoTime();
         User user = userCacheService.findById(id);
-        long elapsed = (System.nanoTime() - start) / 1_000_000;
-        log.info("[场景1-缓存-{}] userId={}, 耗时={}ms", hitCache ? "命中" : "未命中", id, elapsed);
+        log.info("[场景1-缓存-{}] userId={}", hitCache ? "命中" : "未命中", id);
         return user;
     }
 
@@ -42,12 +42,11 @@ public class CacheController {
      * 场景2：连接查询 - 先查缓存
      */
     @GetMapping("/users/{id}/orders")
+    @TimingTrack
     public List<Map<String, Object>> getUserOrders(@PathVariable Long id) {
         boolean hitCache = redisTemplate.hasKey(USER_KEY_PREFIX + id + ORDERS_SUFFIX);
-        long start = System.nanoTime();
         List<Map<String, Object>> orders = userCacheService.findUserWithOrders(id);
-        long elapsed = (System.nanoTime() - start) / 1_000_000;
-        log.info("[场景2-缓存-{}] userId={}, 耗时={}ms", hitCache ? "命中" : "未命中", id, elapsed);
+        log.info("[场景2-缓存-{}] userId={}", hitCache ? "命中" : "未命中", id);
         return orders;
     }
 }
