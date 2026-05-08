@@ -29,10 +29,18 @@ paths:
 
 ## Performance Instrumentation
 
-- Log execution time at controller layer
-- Use `System.currentTimeMillis()` or Spring's `StopWatch` for timing
-- Output format: Include operation name, execution time (ms), and result count
-- Example: `"Query users (direct): 2ms, returned 100 records"`
+- Use `@TimingTrack` annotation from `common-service` module for automatic execution time logging
+- Add the annotation to controller methods to track API performance
+- The annotation automatically logs method name and execution time in milliseconds
+- Example:
+  ```java
+  @TimingTrack
+  @GetMapping("/users/{id}")
+  public User getUser(@PathVariable Long id) {
+      return userService.findById(id);
+  }
+  ```
+- Do not manually add timing code when `@TimingTrack` is available
 
 ## Redis Integration
 
